@@ -18,7 +18,6 @@ class FormHandler {
 
     public function __construct(Main $plugin) {
         $this->plugin = $plugin;
-        $this->loadForms();
     }
 
     public function loadForms(): void {
@@ -57,6 +56,10 @@ class FormHandler {
         } else {
             $this->plugin->getLogger()->warning("Form for command '$command' does not exist.");
         }
+    }
+
+    public function getForms(): array {
+        return $this->forms;
     }
 
     private function createForm(array $formData): Form {
@@ -171,10 +174,10 @@ class FormHandler {
 
                 switch ($commandType) {
                     case "console":
-                        $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $commandString);
+                        $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
                         break;
                     case "player":
-                        $player->chat("/$commandString");
+                        $player->chat("/$command");
                         break;
                 }
             }
@@ -229,10 +232,10 @@ class FormHandler {
 
                             switch ($commandType) {
                                 case "console":
-                                    $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $commandString);
+                                    $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
                                     break;
                                 case "player":
-                                    $player->chat("/$commandString");
+                                    $player->chat("/$command");
                                     break;
                             }
                         }
