@@ -2,14 +2,11 @@
 
 namespace jungganmyeon\JGForm;
 
-use pocketmine\plugin\PluginBase;
 use pocketmine\player\Player;
-use pocketmine\command\CommandSender;
 use pocketmine\permission\PermissionManager;
 use pocketmine\permission\Permission;
 use pocketmine\form\Form;
 use pocketmine\utils\Config;
-use pocketmine\console\ConsoleCommandSender;
 use onebone\economyapi\EconomyAPI;
 
 class FormHandler {
@@ -121,9 +118,13 @@ class FormHandler {
 
             private function checkRequirements(Player $player, array $button): bool {
                 if (isset($button["requirements"]["money"])) {
-                    $moneyRequired = $button["requirements"]["money"]["output"];
-                    $economyAPI = EconomyAPI::getInstance();
-                    return $economyAPI->myMoney($player) >= $moneyRequired;
+                    if(class_exists(EconomyAPI::class)) {
+                        $moneyRequired = $button["requirements"]["money"]["output"];
+                        $economyAPI = EconomyAPI::getInstance();
+                        return $economyAPI->myMoney($player) >= $moneyRequired;
+                    }
+                    $this->plugin->getLogger()->warning("EconomyAPI not found. Requirement check failed for {$player->getName()}.");
+                    return false;
                 }
                 return true;
             }
@@ -135,10 +136,10 @@ class FormHandler {
 
                     switch ($commandType) {
                         case "console":
-                            $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $commandString);
+                            $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $commandString);
                             break;
                         case "player":
-                            $player->chat("/$commandString");
+                            $this->plugin->getServer()->dispatchCommand($player, $commandString);
                             break;
                     }
                 }
@@ -174,10 +175,10 @@ class FormHandler {
 
                 switch ($commandType) {
                     case "console":
-                        $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
+                        $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $command);
                         break;
                     case "player":
-                        $player->chat("/$command");
+                        $this->plugin->getServer()->dispatchCommand($player, $command);
                         break;
                 }
             }
@@ -232,10 +233,10 @@ class FormHandler {
 
                             switch ($commandType) {
                                 case "console":
-                                    $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
+                                    $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $command);
                                     break;
                                 case "player":
-                                    $player->chat("/$command");
+                                    $this->plugin->getServer()->dispatchCommand($player, $command);
                                     break;
                             }
                         }
