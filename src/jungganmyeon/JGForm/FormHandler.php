@@ -8,6 +8,7 @@ use pocketmine\permission\Permission;
 use pocketmine\form\Form;
 use pocketmine\utils\Config;
 use onebone\economyapi\EconomyAPI;
+use pocketmine\console\ConsoleCommandSender;
 
 class FormHandler {
     private Main $plugin;
@@ -136,7 +137,7 @@ class FormHandler {
 
                     switch ($commandType) {
                         case "console":
-                            $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $commandString);
+                            $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $commandString);
                             break;
                         case "player":
                             $this->plugin->getServer()->dispatchCommand($player, $commandString);
@@ -175,7 +176,7 @@ class FormHandler {
 
                 switch ($commandType) {
                     case "console":
-                        $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $command);
+                        $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
                         break;
                     case "player":
                         $this->plugin->getServer()->dispatchCommand($player, $command);
@@ -198,7 +199,13 @@ class FormHandler {
             public function jsonSerialize(): array {
                 $content = [];
                 foreach ($this->formData["content"] as $element) {
-                    $elementData = ["type" => $element["type"], "text" => $element["text"]];
+                    if($element["type"] === "divider"){
+                        $elementData = ["type" => "divider", "text" => ""];
+                    }elseif($element["type"] === "header"){
+                        $elementData = ["type" => "header", "text" => $element["text"]];
+                    }else{
+                        $elementData = ["type" => $element["type"], "text" => $element["text"]];
+                    }
                     if (isset($element["placeholder"])) {
                         $elementData["placeholder"] = $element["placeholder"];
                     }
@@ -214,6 +221,11 @@ class FormHandler {
                             "data" => $element["image"]["data"]
                         ];
                     }
+                    
+                    if(isset($element["tooltip"])){
+                      $elementData["tooltip"] = $element["tooltip"];
+                    }
+                    
                     $content[] = $elementData;
                 }
 
@@ -233,7 +245,7 @@ class FormHandler {
 
                             switch ($commandType) {
                                 case "console":
-                                    $this->plugin->getServer()->dispatchCommand($this->plugin->getServer()->getConsoleSender(), $command);
+                                    $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender($this->plugin->getServer(), $this->plugin->getServer()->getLanguage()), $command);
                                     break;
                                 case "player":
                                     $this->plugin->getServer()->dispatchCommand($player, $command);
