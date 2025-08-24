@@ -29,6 +29,13 @@ Default: OP
 Gives permission for all menus.  
 Default: OP
 
+## What's new?
+- Add type `header` to make the text large in the form
+- Add `tooltip` to add hint/note light, ...
+- Add type `divider` to create a line to divide the form
+
+*ALL APPLY FOR **CUSTOM** FORM ONLY*
+
 ## Configuration Example Shop.yml
 ```yml
 formname: "Shop"
