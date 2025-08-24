@@ -8,15 +8,19 @@ content:
     text: "Enter your name:"
     placeholder: "Name"
     command: ["console", "say Hello, {input}"]
+    
+  - type: "divider"
+  
   - type: "toggle"
     text: "Enable feature?"
-    image:
-      type: "url"
-      data: "https://example.com/enable.png"
+    tooltip: "??????"
+    
+  - type: "divider"
+  
+  - tyoe: "header"
+    text: "hahaha"
+  
   - type: "slider"
     text: "Choose a number"
     min: 1
     max: 10
-    image:
-      type: "path"
-      data: "textures/items/diamond.png"
