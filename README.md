@@ -35,6 +35,7 @@ Default: OP
 - Add type `divider` to create a line to divide the form
 
 *ALL APPLY FOR **CUSTOM** FORM ONLY*
+<br>
 *SEE SAMPLES AT: [example_custom](resources/form/example_custom.yml)*
 
 ## Configuration Example Shop.yml
